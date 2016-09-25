@@ -7,7 +7,9 @@
 
 void tabuleiro(char **Matriz){
      int i, j;
+     printf("  0  1  2  3  4  5  6  7\n");
 	 for(i=0;i<N;i++){
+	 	printf("%d",i);
      	for(j=0;j<N;j++){
      		printf("[%c]",Matriz[i][j]);
      	}
@@ -61,12 +63,14 @@ int stepshow (char **Matriz, int lin, int col, char gamer){
     if(lin < 0 || lin >= N ||
        col < 0 || col >= N ||
        Matriz[lin][col] != gamer)
-        return 0;
- 
+        return 0; 
 }
 
-int runforest(char **Matriz, int lin, int col, int Jogador){
-
+int stepshowshow(char **Matriz, int lin, int col, char gamer){
+    if(lin < 0 || lin >= N ||
+       col < 0 || col >= N ||
+       (Matriz[lin][col] == 'B') || (Matriz[lin][col] == 'P'))
+        return 0; 
 }
 // Verifica o status do jogo
 int flawesvictory(char **Matriz, char Juego, char JuegoD){
@@ -95,6 +99,132 @@ else
     return 1;//Brancas ganham
 
 }
+//Move é o destino da peça e select e a peça que eu havia selecionado anteriormente
+
+int movepecaB(char **Matriz, int linselect, int colselect, int linmove, int colmove, char jogador){//move as peças brancas
+	if((linmove == (linselect -1)) && 
+	  ((colmove == (colselect+1))|| 
+	  	colmove ==(colselect-1)))
+	  	return 0;
+	  	else if((linmove == (linselect -2)) && 
+	           ((colmove == (colselect+2))|| 
+	  	         colmove ==(colselect-2)))
+	  		     return 0;
+	}
+
+int movepecaP(char **Matriz, int linselect, int colselect, int linmove, int colmove, char jogador){//move as peças pretas
+	if((linmove == (linselect +1)) && 
+	  ((colmove == (colselect+1))|| 
+	  	colmove ==(colselect-1)))
+	  	return 0;
+	  else if((linmove == (linselect +2)) && //Come as peças(Na funçao game, o algoritmo verifica se esse movimento é possivel)
+	  ((colmove == (colselect+2))|| 
+	  	colmove ==(colselect-2)))
+	  	return 0;
+	}
+
+char transformerdamaB(char **Matriz){
+	
+	if(Matriz[0][0] == 'B')
+		Matriz[0][0] = 'X';
+	else if(Matriz[0][1] == 'B')
+		Matriz[0][1] = 'X';
+	else if(Matriz[0][2] == 'B')
+		Matriz[0][2] = 'X';
+	else if(Matriz[0][3] == 'B')
+		Matriz[0][3] = 'X';
+	else if(Matriz[0][4] == 'B')
+		Matriz[0][4] = 'X';
+	else if(Matriz[0][5] == 'B')
+		Matriz[0][5] = 'X';
+	else if(Matriz[0][6] == 'B')
+		Matriz[0][6] = 'X';
+	else if(Matriz[0][7] == 'B')
+		Matriz[0][7] = 'X';
+}
+
+
+char transformerdamaP(char **Matriz){
+
+	if(Matriz[7][0] == 'P')
+		Matriz[7][0] = 'O';
+	else if(Matriz[7][1] == 'P')
+		Matriz[7][1] = 'O';
+	else if(Matriz[7][2] == 'P')
+		Matriz[7][2] = 'O';
+	else if(Matriz[7][3] == 'P')
+		Matriz[7][3] = 'O';
+	else if(Matriz[7][4] == 'P')
+		Matriz[7][4] = 'O';
+	else if(Matriz[7][5] == 'P')
+		Matriz[7][5] = 'O';
+	else if(Matriz[7][6] == 'P')
+		Matriz[7][6] = 'O';
+	else if(Matriz[7][7] == 'P')
+		Matriz[7][7] = 'O';		
+}
+
+
+int DamaCE(int LinB, int ColB, char **Matriz, int Def1, char Player){
+	for(LinB; LinB>=Def1; LinB++)
+		for(ColB; ColB>=Def1; ColB++)
+	if(Matriz[LinB][ColB]==' ')
+		return 0;
+	else if(Matriz[LinB][ColB]==Player)
+		return 1;
+	else
+		return 1;
+}
+
+int DamaCD(int LinB, int ColB, char **Matriz, int Def1, char Player){
+	for(LinB; LinB>=Def1; LinB++)
+		for(ColB; ColB>=Def1; ColB--)
+	if(Matriz[LinB][ColB]==' ')
+		return 0;
+	else if(Matriz[LinB][ColB]==Player)
+		return 1;
+	else
+		return 1;
+}
+
+int DamaBE(int LinB, int ColB, char **Matriz, int Def1, char Player){
+	Def1 = Def1 * -1;
+	for(LinB; LinB>=Def1; LinB--)
+		for(ColB; ColB>=Def1; ColB++)
+	if(Matriz[LinB][ColB]==' ')
+		return 0;
+	else if(Matriz[LinB][ColB]==Player)
+		return 1;
+	else
+		return 1;
+}
+
+int DamaBD(Int LinB, int ColB, char **Matriz, int Def1, char Player){
+	Def1 = Def1 * -1;
+	for(LinB; LinB>=Def1; LinB--)
+		for(ColB; ColB>=Def1; ColB--)
+	if(Matriz[LinB][ColB]==' ')
+		return 0;
+	else if(Matriz[LinB][ColB]==Player)
+		return 1;
+	else
+		return 1;
+}
+
+int damaisthelawB(char **Matriz, int linhaA, int linhaB, int colunaA, int colunaB, char Player){
+	Def1 = linhaA - linhaB;
+	Def2 = colunaA - colunaB;
+	if(Def1>0 && Def2>0)
+		DamaCE(linhaB, colunaB, Matriz, Def1, Player);
+	else if((Def1>0 && Def2<0) && (Def1==(Def2*(-1))))
+		DamaCD(linhaB, colunaB, Matriz, Def1, Player);
+	else if((Def1<0 && Def2>0) && (Def2==(Def1*(-1))))
+		DamaBE(linhaB, colunaB, Matriz, Def1, Player);
+	else if((Def1<0 && Def2<0) && (Def1==(Def2*(-1))))
+		DamaBD(linhaB, colunaB, Matriz, Def1, Player);		
+}
+
+
 
 //Executar todas as funções do programa
 void game(){
@@ -105,7 +235,7 @@ void game(){
 	int Jogook = -1;
 	Matriz = initialize();
 	BlackOrWhite(Matriz);
-	int linhaA, colunaA, linhaB, colunaB;
+	int linhaA, colunaA, linhaB, colunaB, j;
 	
 	while(Jogook==-1){
 		tabuleiro(Matriz);
@@ -117,8 +247,36 @@ void game(){
 			printf("\nJogada invalida!\n");
 		    continue;
 
+	}
+	    printf("\nDigite a linha e a coluna na qual você deseja colocar a peça %c:\n", Player);
+	    scanf("%d",&linhaB);
+		scanf("%d",&colunaB);
 
-	}	 
+		if( !stepshowshow(Matriz, linhaB, colunaB, Player)){
+			printf("\nJogada invalida!\n");
+			continue;
+		}
+		if((Player == 'B') && movepecaB(Matriz, linhaA, colunaA, linhaB, colunaB, Player)){
+				printf("\nJogada invalida!\n");
+				continue;
+			}else if((Player == 'P') && movepecaP(Matriz, linhaA, colunaA, linhaB, colunaB, Player)){
+				printf("\nJogada invalida!\n");
+				continue;
+			}
+			transformerdamaP(Matriz);
+			transformerdamaB(Matriz);		
+
+
+		    Matriz[linhaB][colunaB] = Player;
+	        Matriz[linhaA][colunaA] = ' ';
+	        if(Matriz[linhaB+1][colunaB-1] == 'P') 
+	        	Matriz[linhaB +1][colunaB-1] = ' ';
+	        	else if(Matriz[linhaB+1][colunaB+1] == 'P')
+	        		Matriz[linhaB+1][linhaB+1] = ' ';
+	        	else if(Matriz[linhaB-1][colunaB-1] == 'B') 
+	        	Matriz[linhaB -1][colunaB-1] = ' ';
+	            else if(Matriz[linhaB-1][colunaB+1] == 'B') 
+	        	Matriz[linhaB -1][colunaB+1] = ' ';		
 
 		Jogook = statusofgame(Matriz);
 
