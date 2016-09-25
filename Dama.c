@@ -65,7 +65,7 @@ int stepshow (char **Matriz, int lin, int col, char gamer){
        Matriz[lin][col] != gamer)
         return 0; 
 }
-
+//Verifica se o espaço aonde a peça vai ser enviada é valida
 int stepshowshow(char **Matriz, int lin, int col, char gamer){
     if(lin < 0 || lin >= N ||
        col < 0 || col >= N ||
@@ -123,7 +123,7 @@ int movepecaP(char **Matriz, int linselect, int colselect, int linmove, int colm
 	  	return 0;
 	}
 
-char transformerdamaB(char **Matriz){
+char transformerdamaB(char **Matriz){//Transforma as peças brancas em X(DAMA)
 	
 	if(Matriz[0][0] == 'B')
 		Matriz[0][0] = 'X';
@@ -144,7 +144,7 @@ char transformerdamaB(char **Matriz){
 }
 
 
-char transformerdamaP(char **Matriz){
+char transformerdamaP(char **Matriz){//Transforma as peças pretas em O(DAMA)
 
 	if(Matriz[7][0] == 'P')
 		Matriz[7][0] = 'O';
@@ -165,7 +165,7 @@ char transformerdamaP(char **Matriz){
 }
 
 
-int DamaCE(int LinB, int ColB, char **Matriz, int Def1, char Player){
+int DamaCE(int LinB, int ColB, char **Matriz, int Def1, char Player){//Especifica como a dama deve agir caso ela tenha que se mover na Diagonal CIMA/ESQUERDA
 	for(LinB; LinB>=Def1; LinB++)
 		for(ColB; ColB>=Def1; ColB++)
 	if(Matriz[LinB][ColB]==' ')
@@ -176,7 +176,7 @@ int DamaCE(int LinB, int ColB, char **Matriz, int Def1, char Player){
 		return 1;
 }
 
-int DamaCD(int LinB, int ColB, char **Matriz, int Def1, char Player){
+int DamaCD(int LinB, int ColB, char **Matriz, int Def1, char Player){////Especifica como a dama deve agir caso ela tenha que se mover na Diagonal CIMA/DIREITA
 	for(LinB; LinB>=Def1; LinB++)
 		for(ColB; ColB>=Def1; ColB--)
 	if(Matriz[LinB][ColB]==' ')
@@ -187,7 +187,7 @@ int DamaCD(int LinB, int ColB, char **Matriz, int Def1, char Player){
 		return 1;
 }
 
-int DamaBE(int LinB, int ColB, char **Matriz, int Def1, char Player){
+int DamaBE(int LinB, int ColB, char **Matriz, int Def1, char Player){//Especifica como a dama deve agir caso ela tenha que se mover na Diagonal BAIXO/ESQUERDA
 	Def1 = Def1 * -1;
 	for(LinB; LinB>=Def1; LinB--)
 		for(ColB; ColB>=Def1; ColB++)
@@ -199,7 +199,7 @@ int DamaBE(int LinB, int ColB, char **Matriz, int Def1, char Player){
 		return 1;
 }
 
-int DamaBD(Int LinB, int ColB, char **Matriz, int Def1, char Player){
+int DamaBD(int LinB, int ColB, char **Matriz, int Def1, char Player){//Especifica como a dama deve agir caso ela tenha que se mover na Diagonal BAIXO/DIREITA
 	Def1 = Def1 * -1;
 	for(LinB; LinB>=Def1; LinB--)
 		for(ColB; ColB>=Def1; ColB--)
@@ -211,7 +211,8 @@ int DamaBD(Int LinB, int ColB, char **Matriz, int Def1, char Player){
 		return 1;
 }
 
-int damaisthelawB(char **Matriz, int linhaA, int linhaB, int colunaA, int colunaB, char Player){
+int damaisthelaw(char **Matriz, int linhaA, int linhaB, int colunaA, int colunaB, char Player){//Chama as funções da Dama de acordo com as situações linA-liB || colA-ColB
+	int Def1, Def2;
 	Def1 = linhaA - linhaB;
 	Def2 = colunaA - colunaB;
 	if(Def1>0 && Def2>0)
@@ -252,22 +253,22 @@ void game(){
 	    scanf("%d",&linhaB);
 		scanf("%d",&colunaB);
 
-		if( !stepshowshow(Matriz, linhaB, colunaB, Player)){
+		if( !stepshowshow(Matriz, linhaB, colunaB, Player)){//Verifica se a jogada é valida
 			printf("\nJogada invalida!\n");
 			continue;
 		}
-		if((Player == 'B') && movepecaB(Matriz, linhaA, colunaA, linhaB, colunaB, Player)){
+		if((Player == 'B') && movepecaB(Matriz, linhaA, colunaA, linhaB, colunaB, Player)){//Movimenta Pça B
 				printf("\nJogada invalida!\n");
 				continue;
-			}else if((Player == 'P') && movepecaP(Matriz, linhaA, colunaA, linhaB, colunaB, Player)){
+			}else if((Player == 'P') && movepecaP(Matriz, linhaA, colunaA, linhaB, colunaB, Player)){ P/Movimenta PçaB
 				printf("\nJogada invalida!\n");
 				continue;
 			}
-			transformerdamaP(Matriz);
-			transformerdamaB(Matriz);		
+			transformerdamaP(Matriz);//Caso a peça tenha que vira dama, esta função transforma
+			transformerdamaB(Matriz);//Caso a peça tenha que vira dama, esta função transforma		
 
 
-		    Matriz[linhaB][colunaB] = Player;
+		    Matriz[linhaB][colunaB] = Player;//Esses algoritmos esvaziam as casas anteriores que antes estavam ocupadas, além de fazer as peças adversárias serem comidas
 	        Matriz[linhaA][colunaA] = ' ';
 	        if(Matriz[linhaB+1][colunaB-1] == 'P') 
 	        	Matriz[linhaB +1][colunaB-1] = ' ';
@@ -278,16 +279,16 @@ void game(){
 	            else if(Matriz[linhaB-1][colunaB+1] == 'B') 
 	        	Matriz[linhaB -1][colunaB+1] = ' ';		
 
-		Jogook = statusofgame(Matriz);
+		Jogook = statusofgame(Matriz);//Verifica o status do GAme
 
-		if( Player == 'B')
+		if( Player == 'B')//Alterna jogador
             Player = 'P';
         else
             Player = 'B';
     }
-	
+	 
 	if(Jogook = 0)
-		printf("\nPretas Wins!\n");
+		printf("\nPretas Wins!\n");//DEfine o vencedor
 	if(Jogook = 1)
 		printf("\nBrancas Wins!\n");
 
